@@ -3,13 +3,43 @@ import json
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from uuid import UUID
+import csv
+import io
+from urllib.request import urlopen
 
 # AEST is UTC+10 year-round.
 aest = timezone(timedelta(hours=10))
 today = datetime.now(aest).date().isoformat()
 
-entries = json.loads(Path("avatars.json").read_text(encoding="utf-8"))
-pool = [entry["id"] for entry in entries]
+SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRKCBvohgSUP2XK1hfpbI5SENB39gAOyC3jSnBq9OEVOrG34ruPkx8S9DZcgjdZn0X66vb8eKPNVXoZ/pub?output=csv"
+
+with urlopen(SHEET_CSV_URL, timeout=30) as response:
+    csv_text = response.read().decode("utf-8-sig")
+
+reader = csv.DictReader(io.StringIO(csv_text))
+
+if not reader.fieldnames or "id" not in reader.fieldnames:
+    raise ValueError(
+        "The Google Sheet must have an 'id' column. "
+        "Check that the URL is the published CSV link."
+    )
+
+pool = []
+
+for row_number, row in enumerate(reader, start=2):
+    avatar_id = (row.get("id") or "").strip()
+    name = (row.get("name") or "").strip()
+
+    # Ignore completely empty rows.
+    if not avatar_id and not name:
+        continue
+
+    if not avatar_id:
+        raise ValueError(
+            f"Sheet row {row_number}: '{name}' is missing its avatar ID."
+        )
+
+    pool.append(avatar_id)
 
 if not isinstance(pool, list) or len(pool) < 3:
     raise ValueError("avatars.json must contain at least three avatar IDs.")
