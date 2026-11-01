@@ -8,7 +8,8 @@ from uuid import UUID
 aest = timezone(timedelta(hours=10))
 today = datetime.now(aest).date().isoformat()
 
-pool = json.loads(Path("avatars.json").read_text(encoding="utf-8"))
+entries = json.loads(Path("avatars.json").read_text(encoding="utf-8"))
+pool = [entry["id"] for entry in entries]
 
 if not isinstance(pool, list) or len(pool) < 3:
     raise ValueError("avatars.json must contain at least three avatar IDs.")
