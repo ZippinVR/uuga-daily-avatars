@@ -1,0 +1,49 @@
+name: Publish daily avatars
+
+on:
+  # Midnight AEST = 14:00 UTC the previous day.
+  schedule:
+    - cron: "0 14 * * *"
+
+  # Enables the manual "Run workflow" button.
+  workflow_dispatch:
+
+  # Also publish when you edit the pool or generator.
+  push:
+    branches: ["main"]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Generate daily selection
+        run: python3 generate.py
+
+      - name: Upload published files
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
