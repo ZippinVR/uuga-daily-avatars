@@ -1,7 +1,27 @@
 [
-  "avtr_b3a19936-3502-4824-ac2d-a05ffa1845ef",
-  "avtr_70e652a1-db99-4570-b9d0-38edc522c6e2",
-  "avtr_19df7906-d576-4bba-811e-1235bc194818",
-  "avtr_c69b38bc-255a-4e07-9f94-645f484783e0",
-  "avtr_f8811ca5-cf91-4e23-83e1-997d60ea5691"
+  {
+    "name": "Jack-O-Uuga"
+    "id": "avtr_b3a19936-3502-4824-ac2d-a05ffa1845ef"
+    "notes": "-"
+  },
+  {
+    "name": "KangaUuga",
+    "id": "avtr_70e652a1-db99-4570-b9d0-38edc522c6e2",
+    "description": null
+  },
+  {
+    "name": "SwampyUuga",
+    "id": "avtr_19df7906-d576-4bba-811e-1235bc194818",
+    "description": null
+  },
+  {
+    "name": "Conway's Game of Uuga",
+    "id": "avtr_c69b38bc-255a-4e07-9f94-645f484783e0",
+    "description": null
+  },
+  {
+    "name": "GalaxyUuga",
+    "id": "avtr_f8811ca5-cf91-4e23-83e1-997d60ea5691",
+    "description": null
+  }
 ]
